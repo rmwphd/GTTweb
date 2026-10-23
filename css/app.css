@@ -127,6 +127,8 @@ summary.btn::-webkit-details-marker { display: none; }
   box-shadow: 0 8px 28px rgba(20, 30, 40, 0.18);
 }
 .menu-body label { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 0.95rem; }
+.menu-body label.sub { padding-left: 26px; }
+.menu-body label[hidden] { display: none; }
 .menu-body hr { border: 0; border-top: 1px solid var(--rule); margin: 4px 0; width: 100%; }
 .menu-body select, .menu-body input[type="number"] { font: inherit; font-size: 0.9rem; background: var(--paper); color: var(--ink); border: 1px solid var(--rule); border-radius: 4px; padding: 2px 4px; }
 .menu-body input.tiny { width: 3.4em; }

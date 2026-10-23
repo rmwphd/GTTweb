@@ -13,6 +13,7 @@
     flags: { colours: true, grid: true, numbers: true, boxes: true, threading: false, highlights: false,
       dirChanges: false, twists: false, idle: false, holeTags: false, turnDir: false, twining: false },
     turnDirStyle: 'letters',
+    twillBoxes: 'rhythm',
     highlight: { x: 4, y: 4, colour: '#ff0000', width: 1 },
     tab: 'turning',
     weave: { interchange: 'turn', twistMode: 'turn' }
@@ -141,6 +142,7 @@
     return {
       zoom: v.zoom, ratios: v.ratios, mode: v.mode, orient: v.orient, reverse: v.reverse,
       flags: v.flags, turnDirStyle: v.turnDirStyle, highlight: v.highlight,
+      twillBoxes: v.twillBoxes !== 'dirs',
       gridColour: '#808080',
       // Printing always uses a white page, whatever the screen theme.
       background: state.printing ? '#ffffff' : (css.getPropertyValue('--band-bg').trim() || '#f7f8f5'),
@@ -263,7 +265,11 @@
     var gen = p.kind !== 'threaded' ? '<p class="muted">Worked out from the ' + esc(p.kindLabel.toLowerCase()) + ' design, the same way GTT does it.</p>' : '';
     var usesPacks = s.summary.some(function (x) { return x.packs; });
     var anyIdle = s.summary.some(function (x) { return x.I.length && x.I.length < s.nCards; });
-    var h = gen + (state.view.flags.boxes ? '<p class="muted legend"><span class="bx f">5</span> turn forwards <span class="bx b">5</span> turn backwards <span class="bx i">5</span> idle <span class="bx d">5</span> double turn. Beside the band, each pick reads from card 1: the numbers count neighbouring cards that turn together.</p>' : '');
+    var rhythmBoxes = state.view.twillBoxes !== 'dirs' && doc.woven && doc.woven.rhythm;
+    var legend = rhythmBoxes
+      ? '<span class="bx f">5</span> keep the twill rhythm <span class="bx b">5</span> turn against it. Beside the band, each pick reads from card 1: the numbers count neighbouring cards. In a blank area every card keeps its rhythm (two forwards, two backwards, one pick behind the card to its left), so only the cards making the figure are counted. The table below gives the actual directions.'
+      : '<span class="bx f">5</span> turn forwards <span class="bx b">5</span> turn backwards <span class="bx i">5</span> idle <span class="bx d">5</span> double turn. Beside the band, each pick reads from card 1: the numbers count neighbouring cards that turn together.';
+    var h = gen + (state.view.flags.boxes ? '<p class="muted legend">' + legend + '</p>' : '');
     h += '<table class="seq"><thead><tr><th class="n">Pick</th><th>Forwards</th><th>Backwards</th>' +
       (anyIdle ? '<th>Idle</th>' : '') + '<th>Twist</th>' + (usesPacks ? '<th>Packs</th>' : '') + '</tr></thead><tbody>';
     for (var k = s.nPicks - 1; k >= 0; k--) {
@@ -414,6 +420,8 @@
     document.querySelectorAll('[name=twistMode]').forEach(function (r) { r.checked = r.value === v.weave.twistMode; });
     document.querySelectorAll('[data-flag]').forEach(function (c) { c.checked = !!v.flags[c.dataset.flag]; });
     $('turn-style').value = v.turnDirStyle;
+    $('twill-boxes-row').hidden = kind !== 'twill';
+    $('twill-boxes').value = v.twillBoxes === 'dirs' ? 'dirs' : 'rhythm';
     $('hl-x').value = v.highlight.x; $('hl-y').value = v.highlight.y;
     $('r-width').value = v.ratios.width; $('r-end').value = v.ratios.end; $('r-centre').value = v.ratios.centre;
     $('zoom-val').textContent = Math.round(v.zoom / BASE_ZOOM * 100) + '%';
@@ -585,6 +593,7 @@
       c.addEventListener('change', function () { state.view.flags[c.dataset.flag] = c.checked; saveView(); redraw(); });
     });
     $('turn-style').addEventListener('change', function (e) { state.view.turnDirStyle = e.target.value; state.view.flags.turnDir = true; saveView(); redraw(); });
+    $('twill-boxes').addEventListener('change', function (e) { state.view.twillBoxes = e.target.value; state.view.flags.boxes = true; saveView(); refresh(); });
     ['hl-x', 'hl-y'].forEach(function (id) {
       $(id).addEventListener('change', function () {
         state.view.highlight.x = Math.max(0, parseInt($('hl-x').value, 10) || 0);
@@ -733,7 +742,7 @@
   function loadProfiles() { try { return JSON.parse(localStorage.getItem(PROF_KEY) || '{}') || {}; } catch (e) { return {}; } }
   function saveProfiles(o) { try { localStorage.setItem(PROF_KEY, JSON.stringify(o)); } catch (e) { toast('Profiles cannot be saved in this browser.', true); } }
   function profileFields(v) {
-    return JSON.parse(JSON.stringify({ mode: v.mode, reverse: v.reverse, orient: v.orient, zoom: v.zoom, ratios: v.ratios, flags: v.flags, turnDirStyle: v.turnDirStyle, highlight: v.highlight }));
+    return JSON.parse(JSON.stringify({ mode: v.mode, reverse: v.reverse, orient: v.orient, zoom: v.zoom, ratios: v.ratios, flags: v.flags, turnDirStyle: v.turnDirStyle, twillBoxes: v.twillBoxes, highlight: v.highlight }));
   }
   function renderProfiles() {
     var list = $('prof-list'), all = loadProfiles(), names = Object.keys(all).sort();
