@@ -1,0 +1,13 @@
+{
+  "name": "gtt-web",
+  "version": "0.2.0",
+  "description": "A browser version of Guntram's Tabletweaving Thingy",
+  "scripts": {
+    "test": "node tests/run.js",
+    "samples": "node tests/make-samples.js"
+  },
+  "devDependencies": {
+    "@xmldom/xmldom": "^0.8.10"
+  },
+  "private": true
+}

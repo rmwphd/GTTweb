@@ -1,0 +1,126 @@
+<TWData>
+  <Source>Guntram's Tabletweaving Thingy</Source>
+  <Version>1.17</Version>
+  <Release/>
+  <Pattern Type="Doubleface">
+    <Name><![CDATA[DF test]]></Name>
+    <Notes/>
+    <Selvedges>
+      <Left>
+        <Cards Count="0"/>
+      </Left>
+      <Right>
+        <Cards Count="0"/>
+      </Right>
+    </Selvedges>
+    <Width>8</Width>
+    <Length>12</Length>
+    <ColourCount>2</ColourCount>
+    <Cards Count="8">
+      <Card Holes="4" Number="1">
+        <Holes Count="4">
+          <Colour>0</Colour>
+          <Colour>0</Colour>
+          <Colour>15</Colour>
+          <Colour>15</Colour>
+        </Holes>
+        <Threading>S</Threading>
+      </Card>
+      <Card Holes="4" Number="2">
+        <Holes Count="4">
+          <Colour>0</Colour>
+          <Colour>0</Colour>
+          <Colour>15</Colour>
+          <Colour>15</Colour>
+        </Holes>
+        <Threading>Z</Threading>
+      </Card>
+      <Card Holes="4" Number="3">
+        <Holes Count="4">
+          <Colour>0</Colour>
+          <Colour>0</Colour>
+          <Colour>15</Colour>
+          <Colour>15</Colour>
+        </Holes>
+        <Threading>S</Threading>
+      </Card>
+      <Card Holes="4" Number="4">
+        <Holes Count="4">
+          <Colour>0</Colour>
+          <Colour>0</Colour>
+          <Colour>15</Colour>
+          <Colour>15</Colour>
+        </Holes>
+        <Threading>Z</Threading>
+      </Card>
+      <Card Holes="4" Number="5">
+        <Holes Count="4">
+          <Colour>0</Colour>
+          <Colour>0</Colour>
+          <Colour>15</Colour>
+          <Colour>15</Colour>
+        </Holes>
+        <Threading>S</Threading>
+      </Card>
+      <Card Holes="4" Number="6">
+        <Holes Count="4">
+          <Colour>0</Colour>
+          <Colour>0</Colour>
+          <Colour>15</Colour>
+          <Colour>15</Colour>
+        </Holes>
+        <Threading>Z</Threading>
+      </Card>
+      <Card Holes="4" Number="7">
+        <Holes Count="4">
+          <Colour>0</Colour>
+          <Colour>0</Colour>
+          <Colour>15</Colour>
+          <Colour>15</Colour>
+        </Holes>
+        <Threading>S</Threading>
+      </Card>
+      <Card Holes="4" Number="8">
+        <Holes Count="4">
+          <Colour>0</Colour>
+          <Colour>0</Colour>
+          <Colour>15</Colour>
+          <Colour>15</Colour>
+        </Holes>
+        <Threading>Z</Threading>
+      </Card>
+    </Cards>
+    <Palette Name="" Size="16">
+      <Colour Index="1">0</Colour>
+      <Colour Index="2">128</Colour>
+      <Colour Index="3">32768</Colour>
+      <Colour Index="4">32896</Colour>
+      <Colour Index="5">8388608</Colour>
+      <Colour Index="6">8388736</Colour>
+      <Colour Index="7">8421376</Colour>
+      <Colour Index="8">8421504</Colour>
+      <Colour Index="9">12632256</Colour>
+      <Colour Index="10">255</Colour>
+      <Colour Index="11">65280</Colour>
+      <Colour Index="12">65535</Colour>
+      <Colour Index="13">16711680</Colour>
+      <Colour Index="14">16711935</Colour>
+      <Colour Index="15">16776960</Colour>
+      <Colour Index="16">16777215</Colour>
+    </Palette>
+    <Data>
+      <P12>X.......</P12>
+      <P11>.X......</P11>
+      <P10>..X.....</P10>
+      <P9>...X....</P9>
+      <P8>....X...</P8>
+      <P7>.....X..</P7>
+      <P6>......X.</P6>
+      <P5>.......X</P5>
+      <P4>........</P4>
+      <P3>........</P3>
+      <P2>........</P2>
+      <P1>XX......</P1>
+    </Data>
+  </Pattern>
+</TWData>

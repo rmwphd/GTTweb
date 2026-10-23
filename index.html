@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GTT Web</title>
+<meta name="description" content="Open, view and save tablet weaving patterns made with Guntram's Tabletweaving Thingy (GTT), in any modern browser.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<header class="bar">
+  <div class="brand">
+    <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><use href="#tablet"/></svg>
+    <span class="brand-name">GTT Web</span>
+  </div>
+  <div class="file-actions">
+    <label class="btn primary" for="file-input">Open pattern</label>
+    <input id="file-input" type="file" accept=".gtt,.xml" multiple hidden>
+    <button class="btn" id="btn-save" disabled>Save .gtt</button>
+    <button class="btn" id="btn-png" disabled>Save image</button>
+    <button class="btn" id="btn-print" disabled>Print</button>
+  </div>
+  <nav class="doc-tabs" id="doc-tabs" aria-label="Open patterns"></nav>
+</header>
+
+<main id="workspace" class="workspace is-empty">
+  <section class="welcome" id="welcome">
+    <div class="welcome-band" aria-hidden="true"><canvas id="welcome-canvas"></canvas></div>
+    <div class="welcome-text">
+      <h1>Your GTT patterns, woven again.</h1>
+      <p>Open any <code>.gtt</code> file from Guntram's Tabletweaving Thingy to see the band, the threading and the turning sequence. Nothing is uploaded; files stay on this device.</p>
+      <div class="welcome-actions">
+        <label class="btn primary big" for="file-input">Open a pattern</label>
+        <button class="btn big" id="btn-sample">Try a sample</button>
+      </div>
+      <p class="hint">You can also drop files anywhere on this page.</p>
+    </div>
+  </section>
+
+  <section class="viewer" id="viewer" hidden>
+    <div class="toolbar" id="toolbar" role="toolbar" aria-label="Display">
+      <div class="seg" role="group" aria-label="Image">
+        <button data-set="mode:real" aria-pressed="true">Woven</button>
+        <button data-set="mode:block" aria-pressed="false">Blocks</button>
+      </div>
+      <div class="seg" role="group" aria-label="Face">
+        <button data-set="reverse:false" aria-pressed="true">Front</button>
+        <button data-set="reverse:true" aria-pressed="false">Back</button>
+      </div>
+      <div class="seg" role="group" aria-label="Orientation">
+        <button data-set="orient:v" aria-pressed="true" title="Vertical">Vertical</button>
+        <button data-set="orient:h" aria-pressed="false" title="Horizontal">Horizontal</button>
+      </div>
+      <div class="seg" role="group" aria-label="Zoom">
+        <button id="zoom-out" aria-label="Zoom out">&minus;</button>
+        <span class="zoom-val" id="zoom-val">100%</span>
+        <button id="zoom-in" aria-label="Zoom in">+</button>
+      </div>
+      <details class="menu" id="menu-show">
+        <summary class="btn">Show</summary>
+        <div class="menu-body">
+          <label><input type="checkbox" data-flag="colours"> Thread colours</label>
+          <label><input type="checkbox" data-flag="grid"> Outlines</label>
+          <label><input type="checkbox" data-flag="numbers"> Pick and card numbers</label>
+          <label><input type="checkbox" data-flag="boxes"> Turning boxes beside the band</label>
+          <label><input type="checkbox" data-flag="threading"> Threading under the band</label>
+          <label><input type="checkbox" data-flag="highlights"> Guide lines every <input type="number" id="hl-x" min="0" max="99" class="tiny"> cards, <input type="number" id="hl-y" min="0" max="99" class="tiny"> picks</label>
+          <hr>
+          <label><input type="checkbox" data-flag="dirChanges"> Direction changes</label>
+          <label><input type="checkbox" data-flag="twists"> Card twists</label>
+          <label><input type="checkbox" data-flag="idle"> Idling cards</label>
+          <label><input type="checkbox" data-flag="holeTags"> Uppermost hole</label>
+          <label><input type="checkbox" data-flag="turnDir"> Turning direction as
+            <select id="turn-style"><option value="letters">F and B</option><option value="lines">diagonal lines</option><option value="blocks">black and white blocks</option></select></label>
+          <label><input type="checkbox" data-flag="twining"> Twining direction (blocks)</label>
+        </div>
+      </details>
+      <details class="menu" id="menu-ratios">
+        <summary class="btn">Proportions</summary>
+        <div class="menu-body ratios">
+          <p class="menu-note">How each thread is drawn. GTT's defaults are 3, 5 and 0.</p>
+          <label>Width <input type="number" id="r-width" min="1" max="20" step="0.5"></label>
+          <label>End height <input type="number" id="r-end" min="1" max="20" step="0.5"></label>
+          <label>Centre height <input type="number" id="r-centre" min="0" max="20" step="0.5"></label>
+          <button class="btn small" id="r-reset">Use GTT defaults</button>
+        </div>
+      </details>
+    </div>
+
+    <div class="stage">
+      <div class="band-wrap" id="band-wrap">
+        <p class="band-note" id="band-note" hidden></p>
+        <canvas id="band" aria-label="Woven band"></canvas>
+      </div>
+      <aside class="side" id="side">
+        <div class="side-tabs" role="tablist">
+          <button role="tab" data-tab="turning" aria-selected="true">Turning</button>
+          <button role="tab" data-tab="threading" aria-selected="false">Threading</button>
+          <button role="tab" data-tab="pick" aria-selected="false">Pick</button>
+          <button role="tab" data-tab="details" aria-selected="false">Details</button>
+        </div>
+        <div class="side-body" id="side-body"></div>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<div class="drop-veil" id="drop-veil" hidden><p>Drop .gtt files to open them</p></div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="tablet" viewBox="0 0 32 32">
+    <rect x="5" y="5" width="22" height="22" rx="4" transform="rotate(45 16 16)" fill="currentColor"/>
+    <circle cx="16" cy="7.5" r="2.4" fill="var(--paper)"/><circle cx="24.5" cy="16" r="2.4" fill="var(--paper)"/>
+    <circle cx="16" cy="24.5" r="2.4" fill="var(--paper)"/><circle cx="7.5" cy="16" r="2.4" fill="var(--paper)"/>
+  </symbol>
+</svg>
+
+<script src="js/colour.js"></script>
+<script src="js/gttio.js"></script>
+<script src="js/sim.js"></script>
+<script src="js/render.js"></script>
+<script src="js/samples.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

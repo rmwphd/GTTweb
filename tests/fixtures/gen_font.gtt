@@ -1,0 +1,49 @@
+<TWData>
+  <Source>Guntram's Tabletweaving Thingy</Source>
+  <Version>1.17</Version>
+  <Release/>
+  <Font Type="Font">
+    <Name/>
+    <Notes/>
+    <Selvedges>
+      <Left>
+        <Cards Count="0"/>
+      </Left>
+      <Right>
+        <Cards Count="0"/>
+      </Right>
+    </Selvedges>
+    <Height>30</Height>
+    <DefCharWidth>12</DefCharWidth>
+    <Kerning>1</Kerning>
+    <Threading>AllS</Threading>
+    <Data>
+      <Character Letter="(?)A">
+        <Name>(New)Letter A</Name>
+        <SpaceBefore>0</SpaceBefore>
+        <SpaceAfter>0</SpaceAfter>
+        <Pattern Type="Doubleface">
+          <Name/>
+          <Notes/>
+          <Selvedges>
+            <Left>
+              <Cards Count="0"/>
+            </Left>
+            <Right>
+              <Cards Count="0"/>
+            </Right>
+          </Selvedges>
+          <Width>30</Width>
+          <Length>4</Length>
+          <ColourCount>2</ColourCount>
+          <Data>
+            <P4>........................X.X.X.</P4>
+            <P3>.......................X.X.X..</P3>
+            <P2>..............................</P2>
+            <P1>..............................</P1>
+          </Data>
+        </Pattern>
+      </Character>
+    </Data>
+  </Font>
+</TWData>
