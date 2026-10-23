@@ -394,9 +394,34 @@
     document.querySelectorAll('.side-tabs [role=tab]').forEach(function (b) { b.setAttribute('aria-selected', String(b.dataset.tab === tab)); });
     var body = $('side-body');
     var f = { turning: turningPanel, threading: threadingPanel, pick: pickPanel, details: detailsPanel, edit: GTT.editor.panel }[tab] || turningPanel;
+    // Redrawing the panel replaces its contents, so remember where the panel
+    // and each sideways-scrolling chart were scrolled to and put them back.
+    // Otherwise every click on a card far to the right jumps back to card 1.
+    var same = body.dataset.tab === tab;
     var keep = body.scrollTop;
+    var inner = same ? scrollState(body) : {};
     body.innerHTML = f(doc);
-    if (tab === 'edit') { body.scrollTop = keep; GTT.editor.afterRender(doc, body); }
+    body.dataset.tab = tab;
+    if (same) { body.scrollTop = keep; restoreScroll(body, inner); }
+    if (tab === 'edit') GTT.editor.afterRender(doc, body);
+  }
+
+  function scrollKey(el, i) {
+    var t = el.firstElementChild;
+    return i + ':' + (t ? t.className : '');
+  }
+  function scrollState(root) {
+    var out = {};
+    root.querySelectorAll('.chart-scroll').forEach(function (el, i) {
+      if (el.scrollLeft || el.scrollTop) out[scrollKey(el, i)] = [el.scrollLeft, el.scrollTop];
+    });
+    return out;
+  }
+  function restoreScroll(root, saved) {
+    root.querySelectorAll('.chart-scroll').forEach(function (el, i) {
+      var v = saved[scrollKey(el, i)];
+      if (v) { el.scrollLeft = v[0]; el.scrollTop = v[1]; }
+    });
   }
 
   /* ---------- toolbar state ---------- */
