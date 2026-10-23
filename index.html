@@ -18,11 +18,14 @@
     <span class="brand-name">GTT Web</span>
   </div>
   <div class="file-actions">
+    <button class="btn" id="btn-new">New pattern</button>
     <label class="btn primary" for="file-input">Open pattern</label>
     <input id="file-input" type="file" accept=".gtt,.xml" multiple hidden>
     <button class="btn" id="btn-save" disabled>Save .gtt</button>
     <button class="btn" id="btn-png" disabled>Save image</button>
     <button class="btn" id="btn-print" disabled>Print</button>
+    <button class="btn" id="btn-undo" disabled title="Undo (Ctrl+Z)">Undo</button>
+    <button class="btn" id="btn-redo" disabled title="Redo (Ctrl+Shift+Z)">Redo</button>
   </div>
   <nav class="doc-tabs" id="doc-tabs" aria-label="Open patterns"></nav>
 </header>
@@ -46,6 +49,7 @@
       <div class="seg" role="group" aria-label="Image">
         <button data-set="mode:real" aria-pressed="true">Woven</button>
         <button data-set="mode:block" aria-pressed="false">Blocks</button>
+        <button data-set="mode:design" aria-pressed="false" title="The design as drawn in GTT's pattern editor">Design</button>
       </div>
       <div class="seg" role="group" aria-label="Face">
         <button data-set="reverse:false" aria-pressed="true">Front</button>
@@ -77,6 +81,28 @@
           <label><input type="checkbox" data-flag="turnDir"> Turning direction as
             <select id="turn-style"><option value="letters">F and B</option><option value="lines">diagonal lines</option><option value="blocks">black and white blocks</option></select></label>
           <label><input type="checkbox" data-flag="twining"> Twining direction (blocks)</label>
+          <hr>
+          <div class="profiles">
+            <span class="menu-note">Display profiles keep a set of these choices, like GTT's.</span>
+            <div class="prof-row"><select id="prof-list"></select><button class="btn small" id="prof-apply">Use</button><button class="btn small" id="prof-del">Delete</button></div>
+            <div class="prof-row"><input type="text" id="prof-name" placeholder="Profile name"><button class="btn small" id="prof-save">Save current</button></div>
+          </div>
+        </div>
+      </details>
+      <details class="menu" id="menu-weave" hidden>
+        <summary class="btn">Weaving</summary>
+        <div class="menu-body">
+          <fieldset class="opt" id="weave-twill">
+            <legend>Change colours in the twill by</legend>
+            <label><input type="radio" name="interchange" value="turn"> Changing the turning sequence</label>
+            <label><input type="radio" name="interchange" value="twist"> Twisting cards</label>
+          </fieldset>
+          <fieldset class="opt" id="weave-twist">
+            <legend>Change twining direction by</legend>
+            <label><input type="radio" name="twistMode" value="turn"> Changing the turning direction</label>
+            <label><input type="radio" name="twistMode" value="twist"> Twisting cards</label>
+          </fieldset>
+          <p class="menu-note">These match the choices in GTT's settings. The first is GTT's default.</p>
         </div>
       </details>
       <details class="menu" id="menu-ratios">
@@ -102,12 +128,36 @@
           <button role="tab" data-tab="threading" aria-selected="false">Threading</button>
           <button role="tab" data-tab="pick" aria-selected="false">Pick</button>
           <button role="tab" data-tab="details" aria-selected="false">Details</button>
+          <button role="tab" data-tab="edit" aria-selected="false">Edit</button>
         </div>
         <div class="side-body" id="side-body"></div>
       </aside>
     </div>
   </section>
 </main>
+
+<dialog id="new-dialog" class="dlg">
+  <form method="dialog" id="new-form">
+    <h2>New pattern</h2>
+    <label>Type
+      <select id="new-kind">
+        <option value="threaded">Threaded-in</option>
+        <option value="doubleface">Double-face, 2 colours</option>
+        <option value="doubleface4">Double-face, multiple colours</option>
+        <option value="twill">3/1 broken twill</option>
+        <option value="twist">Twist-patterned</option>
+        <option value="brocade">Brocade</option>
+        <option value="font">Font (for lettered bands)</option>
+        <option value="letteredband">Lettered band</option>
+      </select></label>
+    <label id="new-holes-row">Holes per card
+      <select id="new-holes"><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></label>
+    <label id="new-cards-row"><span id="new-cards-label">Cards</span> <input type="number" id="new-cards" min="1" max="400" value="16"></label>
+    <label id="new-length-row">Rows <input type="number" id="new-length" min="1" max="2000" value="24"></label>
+    <label>Name <input type="text" id="new-name" value="New pattern"></label>
+    <div class="dlg-actions"><button class="btn" value="cancel" formnovalidate>Cancel</button><button class="btn primary" value="ok" id="new-ok">Create</button></div>
+  </form>
+</dialog>
 
 <div class="drop-veil" id="drop-veil" hidden><p>Drop .gtt files to open them</p></div>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
@@ -123,8 +173,11 @@
 <script src="js/colour.js"></script>
 <script src="js/gttio.js"></script>
 <script src="js/sim.js"></script>
+<script src="js/gen.js"></script>
+<script src="js/edit.js"></script>
 <script src="js/render.js"></script>
 <script src="js/samples.js"></script>
+<script src="js/editor.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

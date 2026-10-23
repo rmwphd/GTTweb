@@ -27,10 +27,19 @@ See `js/sim.js`. Tested by `tests/run.js` against fixtures `t1.gtt` and `t2.gtt`
 - Uppermost-hole tags: for an untwisted card the tag equals the visible hole; each twist reflects the labelling about the last visible hole.
 - Twining marker colours: S-twined (\) red, Z-twined (/) blue.
 
+## Generators (verified against GTT captures, see js/gen.js)
+
+- Double-face (2 and 4 colour): two picks per design row. Background cards turn F F, B B, F F ... by row; X cells turn the opposite way for that row.
+- 3/1 broken twill: card c follows FFBB[(k - c) mod 4] for a Z background (S mirrored). Odd cards' rows start one pick earlier, hence GTT's staggered grid. At each block start the card switches direction unless that shows the wrong colour, in which case it repeats the direction (or, with "Use card twists", is twisted, except in a long-float block). A long float reverses the direction between the block's two picks. On the final pick GTT reads past the top of the design for some odd cards; GTT Web does not copy that.
+- Twist-patterned: one pick per design row. S cards turn F and Z cards B in the background; X cells reverse. With the twist option all cards turn F and twist where their cell changes. GTT 1.17 places those twists one card left and one row later (apparently a bug); GTT Web does not copy that.
+- Brocade without a ground weave: all cards turn F; weft floats are drawn as solid blocks of weft colour.
+- Selvedge cards turn forwards on every pick.
+
 ## Not yet verified
 
 - Colours on the reverse face.
-- How GTT turns double-face, twill (one-pack method, FFBB starting offsets, long floats), twist-patterned, brocade and lettered designs into turning sequences and woven images. GTT can be driven under Wine to capture these (Create menu, then Real Image tab).
+- Letter order in lettered bands (GTT says the text comes out backwards when woven from pick 1; GTT Web puts the first letter at the far end).
+- Brocade with an imported ground weave.
 
 ## Full feature list (from GTT.exe's forms)
 

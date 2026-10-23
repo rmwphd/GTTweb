@@ -176,7 +176,7 @@
         poly(ctx, map, cellShape(k, c));
         ctx.fillStyle = fill;
         ctx.fill();
-        if (o.flags.grid && (unit >= 4)) {
+        if (o.flags.grid && !o.twiningReal && (unit >= 4)) {
           ctx.lineWidth = 1;
           ctx.strokeStyle = gridColour;
           ctx.stroke();
@@ -197,6 +197,46 @@
           ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(bb[0], bb[1]);
           ctx.strokeStyle = o.flags.twining ? (sl === '/' ? MARK.twineZ : MARK.twineS) : '#000000';
           ctx.stroke();
+        }
+      }
+    }
+
+    // Twining lines in the woven view. For twist-patterned bands GTT draws
+    // each cell's sloped lower edge as a heavy black line; stacked cells then
+    // join into long diagonals. Otherwise the twining flag draws a coloured
+    // line through each cell.
+    if (o.mode !== 'block' && (o.twiningReal || o.flags.twining)) {
+      for (k = 0; k < sim.nPicks; k++) {
+        for (c = 0; c < sim.nCards; c++) {
+          var bnd = boundary(k, c);
+          var cl2 = sim.rows[k][c];
+          var a2, b2;
+          if (o.twiningReal) {
+            ctx.lineWidth = Math.max(1.5, Math.min(w, P) / 6);
+            ctx.strokeStyle = '#000000';
+            a2 = map(c * w, bnd[0]); b2 = map(c * w + w, bnd[1]);
+          } else {
+            ctx.lineWidth = Math.max(1, Math.min(w, P) / 7);
+            ctx.strokeStyle = cl2.slant === '/' ? MARK.twineZ : MARK.twineS;
+            a2 = map(c * w + w * 0.12, bnd[0] + (bnd[1] - bnd[0]) * 0.12 + P / 2);
+            b2 = map(c * w + w * 0.88, bnd[0] + (bnd[1] - bnd[0]) * 0.88 + P / 2);
+          }
+          ctx.beginPath(); ctx.moveTo(a2[0], a2[1]); ctx.lineTo(b2[0], b2[1]); ctx.stroke();
+        }
+      }
+    }
+
+    // Brocade: supplementary weft floating over the cards
+    if (o.brocade) {
+      var bw = o.brocade.wefts, threads = o.brocade.threads;
+      for (k = 0; k < sim.nPicks && k < bw.length; k++) {
+        for (c = 0; c < sim.nCards; c++) {
+          var wi = bw[k][c];
+          if (!wi) continue;
+          var vb = o.mode === 'block' ? k * P : k * P + s / 2;
+          poly(ctx, map, [[c * w, vb], [(c + 1) * w, vb], [(c + 1) * w, vb + P], [c * w, vb + P]]);
+          ctx.fillStyle = (threads[wi - 1] && threads[wi - 1].colour) || '#000000';
+          ctx.fill();
         }
       }
     }
@@ -463,7 +503,11 @@
       if (L.orient === 'h') { v = L.bandV - (x - L.ox); u = L.bandU - (y - L.oy); }
       else { u = x - L.ox; v = L.bandV - (y - L.oy); }
       if (u < 0 || u >= L.bandU || v < 0 || v >= L.bandV) return null;
-      return { card: Math.floor(u / cw), pick: Math.floor(v / ch) };
+      var card = Math.floor(u / cw);
+      var off = opts.stagger ? opts.stagger(card) * ch : 0;
+      var row = Math.floor((v - off) / ch);
+      if (row < 0 || row >= nRows) return null;
+      return { card: card, pick: row };
     };
     return L;
   }
