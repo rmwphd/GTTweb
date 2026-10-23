@@ -121,6 +121,7 @@
       }
       rows.push(row);
       sum.runs = turningRuns(row);
+      if (p.rhythm) sum.rhythmRuns = rhythmRuns(row, p.rhythm, pi);
       summary.push(sum);
     });
 
@@ -147,6 +148,22 @@
     return runs;
   }
 
+  // The same notation for twill: count neighbouring cards that keep their
+  // plain twill rhythm ('N') or turn against it ('R'). A blank area of the
+  // design is then a single box.
+  function rhythmRuns(row, rhythm, k) {
+    var runs = [];
+    row.forEach(function (c, ci) {
+      var r = rhythm[ci] && rhythm[ci][k];
+      var dir = c.dir === 'I' ? 'I' : (!r || c.dir === r) ? 'N' : 'R';
+      var dist = dir === 'I' ? 0 : (c.dist || 1);
+      var last = runs[runs.length - 1];
+      if (last && last.dir === dir && last.dist === dist) last.n++;
+      else runs.push({ dir: dir, dist: dist, n: 1 });
+    });
+    return runs;
+  }
+
   // "1 - 3; 5; 7 - 8"
   function formatRanges(list) {
     if (!list.length) return '';
@@ -164,6 +181,7 @@
     simulate: simulate,
     formatRanges: formatRanges,
     turningRuns: turningRuns,
+    rhythmRuns: rhythmRuns,
     holeLetter: function (i) { return HOLE_LETTERS[i] || String(i + 1); },
     slantOf: slantOf
   };

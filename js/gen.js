@@ -125,7 +125,15 @@
       }
       picks.push(acts);
     }
-    return base(p, cards, picks);
+    // The plain twill rhythm of every card (what it does in a blank area),
+    // so the turning boxes can count only the cards that break it.
+    var rhythm = [];
+    for (var c3 = 0; c3 < n; c3++) {
+      var ph = S ? -c3 : c3, rr = [];
+      for (var k3 = 0; k3 < nPicks; k3++) rr.push('FFBB'[((k3 - ph) % 4 + 4) % 4]);
+      rhythm.push(rr);
+    }
+    return base(p, cards, picks, { rhythm: rhythm });
   }
 
   /* Twist-patterned (warp-twined) bands. Every card carries one colour, so
@@ -277,6 +285,11 @@
       for (var j = 0; j < right.length; j++) r.push(turn(nl + nd + j + 1, 'F'));
       return l.concat(moved, r);
     });
+    if (out.rhythm) {
+      var always = out.picks.map(function () { return 'F'; });
+      var pad = function (k) { var a = []; for (var i = 0; i < k; i++) a.push(always.slice()); return a; };
+      out.rhythm = pad(nl).concat(out.rhythm, pad(right.length));
+    }
     return out;
   }
 

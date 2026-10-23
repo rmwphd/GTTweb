@@ -301,15 +301,20 @@
 
   /* ---------- turning boxes (Linda Hendrickson's notation) ---------- */
 
-  var BOX = { F: '#ffffff', B: '#b9b9b9', I: '#ececec', line: '#2b2b2b', text: '#111111' };
+  var BOX = { F: '#ffffff', B: '#b9b9b9', N: '#ffffff', R: '#b9b9b9', I: '#ececec', line: '#2b2b2b', text: '#111111' };
+
+  // Which runs the boxes show: plain directions, or for twill (when chosen)
+  // the cards that keep or break the twill rhythm.
+  function boxRuns(sum, o) { return (o.twillBoxes && sum.rhythmRuns) ? sum.rhythmRuns : sum.runs; }
 
   function boxMetrics(sim, o) {
     var z = o.zoom;
     var P = (o.ratios.end + o.ratios.centre) * z;
     var maxRuns = 0, maxN = 1, twistW = 0;
     sim.summary.forEach(function (x) {
-      maxRuns = Math.max(maxRuns, x.runs.length);
-      x.runs.forEach(function (r) { maxN = Math.max(maxN, r.n); });
+      var runs = boxRuns(x, o);
+      maxRuns = Math.max(maxRuns, runs.length);
+      runs.forEach(function (r) { maxN = Math.max(maxN, r.n); });
       if (x.twist.length) twistW = Math.max(twistW, 26 + 7 * GTT.sim.formatRanges(x.twist).length);
     });
     var font = Math.max(8, Math.min(16, P * 0.68));
@@ -327,7 +332,7 @@
     for (var k = 0; k < sim.nPicks; k++) {
       var v0 = k * L.P + (o.mode === 'block' ? 0 : L.s / 2), v1 = v0 + L.P;
       var a = map(0, v0), b = map(0, v1);
-      var runs = sim.summary[k].runs;
+      var runs = boxRuns(sim.summary[k], o);
       var pos = 0;
       for (var i = 0; i < runs.length; i++) {
         var r = runs[i], x, y, wdt, hgt;

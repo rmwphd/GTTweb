@@ -223,5 +223,19 @@ fs.readdirSync(path.join(__dirname, 'fixtures')).filter(f => f.endsWith('.gtt'))
   eq(df.data, want, 'lettered band saved as double-face');
 }
 
+// --- twill boxes counted against the twill rhythm ---
+{
+  const p = GTT.edit.create('twill', { cards: 12, length: 12, name: 'rhythm' });
+  p.backgroundTwill = 'S';
+  for (let r = 3; r < 9; r++) p.data[r] = '...XXXXXX...';
+  p.selvedges = { left: [{ number: 1, holes: [0, 0, 0, 0], threading: 'S' }], right: [] };
+  const w = GTT.gen.generate(p, {});
+  const s = GTT.sim.simulate(w);
+  const fmt = (k) => s.summary[k].rhythmRuns.map(r => (r.dir === 'R' ? 'R' : '') + r.n).join(' ');
+  eq(fmt(0), '13', 'twill rhythm: blank pick is one box (selvedge included)');
+  eq(fmt(9), '4 R6 3', 'twill rhythm: solid block turns against the rhythm');
+  eq(s.summary[0].runs.length > 1, true, 'twill: plain direction boxes still available');
+}
+
 console.log(`${passes} passed, ${failures} failed`);
 process.exit(failures ? 1 : 0);
