@@ -1,0 +1,27 @@
+<TWData>
+  <Source>Guntram's Tabletweaving Thingy</Source>
+  <Version>1.17</Version>
+  <Release/>
+  <Pattern Type="TwistPatterned">
+    <Name><![CDATA[Twist test]]></Name>
+    <Notes/>
+    <Width>10</Width>
+    <Length>12</Length>
+    <ColourCount>2</ColourCount>
+    <Data>
+      <P12>..........</P12>
+      <P11>..XXXX....</P11>
+      <P10>...XX.....</P10>
+      <P9>..........</P9>
+      <P8>.XXXXXXXX.</P8>
+      <P7>XX.....XX.</P7>
+      <P6>X.....XX..</P6>
+      <P5>X....XX...</P5>
+      <P4>XX..XX....</P4>
+      <P3>.XXXX.....</P3>
+      <P2>..XX......</P2>
+      <P1>..........</P1>
+    </Data>
+    <Threading>S, S, S, S, S, Z, Z, Z, Z, Z</Threading>
+  </Pattern>
+</TWData>
