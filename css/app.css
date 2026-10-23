@@ -270,6 +270,14 @@ table.lgrid td.x { background: #1c1c1c; }
 .print-only { display: none; }
 @media print {
   @page { margin: 12mm; }
+  /* Thread colours are the content, so print them even when the browser's
+   * "background graphics" option is off. Paper is always light. */
+  *, *::before, *::after { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  :root, :root[data-theme="dark"], :root:not([data-theme="light"]) {
+    --paper: #fff; --panel: #fff; --raised: #fff; --ink: #000; --ink-soft: #333;
+    --woad: #2c5677; --woad-ink: #fff; --weld: #d4a72c; --madder: #9e3b2e;
+    --rule: #999; --band-bg: #fff; color-scheme: light;
+  }
   body { background: #fff; color: #000; display: block; }
   .bar, .toolbar, .side-tabs, .welcome, .toast, .drop-veil, .band-note { display: none !important; }
   .stage { display: block; }

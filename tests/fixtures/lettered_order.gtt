@@ -1,0 +1,82 @@
+<TWData>
+  <Source>Guntram's Tabletweaving Thingy</Source>
+  <Version>1.17</Version>
+  <Release/>
+  <Pattern Type="LetteredBand">
+    <Notes/>
+    <Text>
+      <Char>L</Char>
+      <Char>T</Char>
+      <Char>T</Char>
+    </Text>
+    <Font Name="Order font" Encapsulated="Yes">
+      <Font Type="Font">
+        <Name>Order font</Name>
+        <Notes/>
+        <Selvedges>
+          <Left>
+            <Cards Count="0"/>
+          </Left>
+          <Right>
+            <Cards Count="0"/>
+          </Right>
+        </Selvedges>
+        <Height>7</Height>
+        <DefCharWidth>8</DefCharWidth>
+        <Kerning>2</Kerning>
+        <Threading>AllS</Threading>
+        <Data>
+          <Character Letter="L">
+            <Name>L</Name>
+            <SpaceBefore>0</SpaceBefore>
+            <SpaceAfter>0</SpaceAfter>
+            <Pattern Type="Doubleface">
+              <Name/>
+              <Notes/>
+              <Selvedges>
+                <Left>
+                  <Cards Count="0"/>
+                </Left>
+                <Right>
+                  <Cards Count="0"/>
+                </Right>
+              </Selvedges>
+              <Width>7</Width>
+              <Length>3</Length>
+              <ColourCount>2</ColourCount>
+              <Data>
+                <P3>X......</P3>
+                <P2>X......</P2>
+                <P1>XXXXXXX</P1>
+              </Data>
+            </Pattern>
+          </Character>
+          <Character Letter="T">
+            <Name>T</Name>
+            <SpaceBefore>1</SpaceBefore>
+            <SpaceAfter>0</SpaceAfter>
+            <Pattern Type="Doubleface">
+              <Name/>
+              <Notes/>
+              <Selvedges>
+                <Left>
+                  <Cards Count="0"/>
+                </Left>
+                <Right>
+                  <Cards Count="0"/>
+                </Right>
+              </Selvedges>
+              <Width>7</Width>
+              <Length>2</Length>
+              <ColourCount>2</ColourCount>
+              <Data>
+                <P2>......X</P2>
+                <P1>...X...</P1>
+              </Data>
+            </Pattern>
+          </Character>
+        </Data>
+      </Font>
+    </Font>
+  </Pattern>
+</TWData>

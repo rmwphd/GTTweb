@@ -35,11 +35,19 @@ See `js/sim.js`. Tested by `tests/run.js` against fixtures `t1.gtt` and `t2.gtt`
 - Brocade without a ground weave: all cards turn F; weft floats are drawn as solid blocks of weft colour.
 - Selvedge cards turn forwards on every pick.
 
-## Not yet verified
+## Back of the band (verified, with one deliberate difference)
 
-- Colours on the reverse face.
-- Letter order in lettered bands (GTT says the text comes out backwards when woven from pick 1; GTT Web puts the first letter at the far end).
-- Brocade with an imported ground weave.
+- GTT's "Show Reverse Side" puts card 1 on the right and keeps each thread's slant as on the front. A cord twines the same way seen from either side, so that is right, and GTT Web does the same.
+- The back shows the thread underneath: for an untwisted card, the hole two places on from the visible one. This matches GTT exactly.
+- For twisted cards GTT works the back out from the hole labels instead of the holes. On some picks it then shows the same thread on both faces, which cannot happen. GTT Web keeps showing the thread that is really underneath. In the T2 test pattern this changes four cells (`tests/run.js`).
+
+## Lettered bands (verified)
+
+- GTT's "create pattern" for a lettered band gives exactly the rows GTT Web makes: the last letter starts at pick 1, so the first letter is at the far end, and each letter's own rows keep their order (`tests/fixtures/lettered_order.gtt`).
+
+## Brocade over a ground weave (verified by eye)
+
+- GTT draws the ground weave's turning sequence under the brocade, one ground pick per brocade pick, with the weft floats on top. GTT Web's woven view matches GTT's for a double-face ground.
 
 ## Full feature list (from GTT.exe's forms)
 

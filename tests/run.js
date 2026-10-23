@@ -54,6 +54,19 @@ function column(sim, ci, key) {
     'D,B,A,D,D,A,C,D', 'D,D,C,B,C,D,A,B', 'D,D,C,C,C,D,A,B', 'D,B,A,A,A,B,C,D', 'D,D,A,A,D,D,C,B'
   ];
   colours.forEach((c, i) => eq(column(s, i, 'hole'), L(c), 't2 card ' + (i + 1) + ' visible hole'));
+  // Back face, captured from GTT's "Show Reverse Side" (card 1 is on the right
+  // there). GTT Web agrees except on four cells of twisted cards, where GTT
+  // shows the same thread on both faces; GTT Web shows the thread that is
+  // really underneath (see docs/gtt-notes.md).
+  const gttBack = ['B,D,C,B,B,C,A,B', 'B,B,A,D,A,B,C,D', 'B,B,A,A,A,B,C,D', 'B,D,C,C,C,D,A,B', 'B,B,C,C,B,B,A,D'];
+  const differ = { '2,3': 'C', '4,6': 'B', '4,8': 'D', '5,7': 'C' }; // card,pick -> GTT Web's hole
+  gttBack.forEach((c, i) => {
+    const want = L(c).map((h, k) => differ[(i + 1) + ',' + (k + 1)] || h);
+    eq(column(s, i, 'backHole').map(GTT.sim.holeLetter), want, 't2 card ' + (i + 1) + ' back face');
+    column(s, i, 'backHole').forEach((h, k) => {
+      if (h === s.rows[k][i].hole) eq('same thread on both faces', 'different', 't2 card ' + (i + 1) + ' pick ' + (k + 1));
+    });
+  });
   tags.forEach((c, i) => eq(column(s, i, 'tag'), L(c), 't2 card ' + (i + 1) + ' uppermost-hole tag'));
   eq(column(s, 0, 'slant').join(''), '////\\\\\\\\', 't2 card 1 slants');
   eq(column(s, 3, 'slant').slice(0, 3).join(''), '\\\\\\', 't2 card 4 (Z, F) slants');
@@ -199,6 +212,15 @@ fs.readdirSync(path.join(__dirname, 'fixtures')).filter(f => f.endsWith('.gtt'))
   eq([br.kind, br.brocadePicks.length, br.brocadePicks[5].tieDowns, br.wefts[1].colour], ['brocade', 10, [0, 3, 6, 7], '#0000ff'], 'brocade picks and wefts');
   const ft = load('gen_font.gtt');
   eq([ft.kind, ft.font.height, ft.font.chars.length, ft.font.chars[0].pattern.width], ['font', 30, 1, 30], 'font file');
+}
+
+// --- lettered band: letter order and spacing, as GTT 1.17 generates it ---
+{
+  const p = load('lettered_order.gtt');
+  const want = fs.readFileSync(path.join(__dirname, 'expected', 'lettered_order_rows.txt'), 'utf8').split(/\r?\n/).filter(Boolean);
+  eq(GTT.gen.letterRows(p.font, p.text), want, 'lettered band rows (text LTT, pick 1 first)');
+  const df = GTT.edit.letteredToDoubleface(p);
+  eq(df.data, want, 'lettered band saved as double-face');
 }
 
 console.log(`${passes} passed, ${failures} failed`);

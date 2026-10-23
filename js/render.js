@@ -144,6 +144,10 @@
       var row = sim.rows[Math.min(k, sim.nPicks - 1)];
       var slant = row ? row[card].slant : '/';
       var vc = k * P + s / 2;
+      // A cord looks the same way round from either side, so the back keeps
+      // the front's slant. The back view mirrors the card order, which would
+      // flip the slant, so the boundary is flipped here to cancel that.
+      if (o.reverse) slant = slant === '/' ? '\\' : '/';
       return slant === '/' ? [vc - s / 2, vc + s / 2] : [vc + s / 2, vc - s / 2];
     }
 
@@ -195,7 +199,7 @@
           var a = sl === '/' ? map(u0, v0) : map(u0, v1);
           var bb = sl === '/' ? map(u1, v1) : map(u1, v0);
           ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(bb[0], bb[1]);
-          ctx.strokeStyle = o.flags.twining ? (sl === '/' ? MARK.twineZ : MARK.twineS) : '#000000';
+          ctx.strokeStyle = o.flags.twining ? (cl.slant === '/' ? MARK.twineZ : MARK.twineS) : '#000000';
           ctx.stroke();
         }
       }

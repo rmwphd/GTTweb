@@ -142,9 +142,10 @@
       zoom: v.zoom, ratios: v.ratios, mode: v.mode, orient: v.orient, reverse: v.reverse,
       flags: v.flags, turnDirStyle: v.turnDirStyle, highlight: v.highlight,
       gridColour: '#808080',
-      background: css.getPropertyValue('--band-bg').trim() || '#f7f8f5',
-      textColour: css.getPropertyValue('--ink').trim() || '#222',
-      selectedPick: doc ? doc.selectedPick : null
+      // Printing always uses a white page, whatever the screen theme.
+      background: state.printing ? '#ffffff' : (css.getPropertyValue('--band-bg').trim() || '#f7f8f5'),
+      textColour: state.printing ? '#000000' : (css.getPropertyValue('--ink').trim() || '#222'),
+      selectedPick: doc && !state.printing ? doc.selectedPick : null
     };
   }
 
@@ -172,7 +173,7 @@
       o.twiningReal = !!doc.woven.twining;
       o.brocade = doc.woven.brocade || null;
       L = GTT.render.drawThreaded(canvas, doc.woven, doc.sim, o);
-      if (doc.selectedPick !== null) drawSelection(canvas, L, doc.selectedPick, o);
+      if (o.selectedPick !== null && o.selectedPick !== undefined) drawSelection(canvas, L, o.selectedPick, o);
     } else {
       var grid = [], opts = { cellW: 2, cellH: 2 }, colourFor;
       var dark = '#1c1c1c', light = '#ffffff';
@@ -525,9 +526,11 @@
     $('band').toBlob(function (b) { if (b) download(b, baseName(doc) + '.png'); }, 'image/png');
   }
 
-  function printDoc() {
+  /* Printing, from the Print button or the browser's own menu. The band is
+   * redrawn on white and the threading chart and turning sequence are added
+   * below it; afterwards the screen view is restored. */
+  function beforePrint() {
     var doc = activeDoc(); if (!doc) return;
-    var prev = state.view.tab;
     var extra = document.getElementById('print-extra');
     if (!extra) {
       extra = document.createElement('div');
@@ -537,9 +540,20 @@
     }
     extra.innerHTML = '<h2>' + esc(doc.p.name) + '</h2>' + threadingPanel(doc) + '<h3>Turning sequence</h3>' + turningPanel(doc);
     $('side').hidden = true;
-    window.print();
+    state.printing = true;
+    redraw();
+  }
+
+  function afterPrint() {
+    if (!state.printing) return;
+    state.printing = false;
     $('side').hidden = false;
-    state.view.tab = prev;
+    if (activeDoc()) redraw();
+  }
+
+  function printDoc() {
+    if (!activeDoc()) return;
+    window.print();
   }
 
   /* ---------- wiring ---------- */
@@ -708,6 +722,8 @@
     var t = null;
     window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(function () { if (!activeDoc()) drawWelcome(); }, 150); });
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { refresh(); });
+    window.addEventListener('beforeprint', beforePrint);
+    window.addEventListener('afterprint', afterPrint);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (activeDoc()) redraw(); });
   }
 

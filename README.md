@@ -6,6 +6,9 @@ Everything runs in the browser. Files are read on your device and are never uplo
 
 GTT Web is free and open source under the MIT License.
 
+Clone this repo and open index.html on your device, or use GTT Web here: https://rmwphd.github.io/GTTweb/index.html
+
+
 ## What works now
 
 - **Opens every GTT file type**: threaded-in, double-face (2 and 4 colour), 3/1 broken twill, brocade, twist-patterned, lettered bands and fonts. Files from GTT 1.05 through 1.17 are supported, including the older layouts (`Threaded`, `Reversals`, missing palettes).
@@ -38,9 +41,9 @@ Patterns saved after editing open in the original GTT 1.17; every pattern type w
 
 Open `index.html` in a browser. No build step and no server are needed, although it also works from any static host such as GitHub Pages.
 
-To publish on GitHub Pages, push this folder to a repository and turn on Pages for the main branch (root folder).
+To publish it on your own GitHub Pages site, fork this repository and turn on Pages for the main branch (root folder).
 
-## How the simulation was checked
+## How the weaving results were checked
 
 The weaving rules were measured from GTT 1.17 itself, running under Wine, using test patterns with a different colour in every hole. The fixtures in `tests/fixtures` are those test patterns, and `tests/run.js` checks GTT Web against what GTT drew:
 
@@ -61,9 +64,9 @@ node tests/run.js
 
 The double-face, twill and twist-patterned generators were checked the same way, pick by pick, against turning directions and colours captured from GTT (`tests/expected`).
 
-Not yet confirmed against GTT: the colours on the back of the band, the order of letters in lettered bands, and brocade over an imported ground weave.
+The back of the band, the order of letters in lettered bands and brocade over a ground weave were also checked against GTT.
 
-One difference is deliberate. When GTT is set to make twist-patterned designs with card twists, it places each twist one card to the left and one row later than the design calls for. That looks like a bug in GTT, so GTT Web twists the card whose cell changes. GTT's default method (changing the turning direction) matches exactly.
+Two differences from GTT 1.17 are intentional: First, on the back of the band GTT sometimes shows a twisted card's front thread as well. That cannot happen on a real band, so GTT Web shows the thread that is really underneath. Second, when GTT is set to make twist-patterned designs with card twists, it places each twist one card to the left and one row later than the design calls for. That looks like a bug in GTT, so GTT Web twists the card whose cell changes. GTT's default method (changing the turning direction) matches exactly.
 
 ## Credits
 
